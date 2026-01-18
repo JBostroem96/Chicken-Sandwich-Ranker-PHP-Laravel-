@@ -1,0 +1,44 @@
+# Environment & secrets
+.env
+.env.*
+.auth.json
+
+# Dependencies
+/node_modules
+/vendor
+
+# Build output
+/public/build
+/public/hot
+
+# Storage runtime files
+/storage/*.key
+/storage/framework/*
+/storage/logs/*
+/public/storage
+
+# Logs & cache
+*.log
+.phpunit.result.cache
+/.phpunit.cache
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+/.idea
+/.vscode
+/.fleet
+/.zed
+/.nova
+
+# Laravel tooling
+Homestead.json
+Homestead.yaml
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+_ide_helper.php
