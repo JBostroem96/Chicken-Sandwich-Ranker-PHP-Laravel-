@@ -44,22 +44,9 @@ Route::controller(PageViewController::class)->group(function () {
 Route::resource('user-chicken-sandwiches', UserChickenSandwichController::class);
 Route::resource('chicken-sandwiches', ChickenSandwichController::class);
 
-
 Route::resource('user', UserController::class);
 
 Route::get('/results', [ChickenSandwichController::class, 'displayResults'])->name('results');
-
-// Optional: Dashboard (only if needed)
-Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-// Laravel Breeze profile routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 // Breeze auth routes (register, login, password, etc.)
 require __DIR__.'/auth.php';
