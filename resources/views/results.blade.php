@@ -49,10 +49,10 @@
                 <table class="w-full">
                     <tr>
                         <td class="flex flex-col items-center gap-8 text-white py-4">
-                            <img src="{{ $chicken_sandwich->logo }}" alt="logo" class="max-w-1/2 max-h-1/2">
+                            <img src="{{ asset('storage/' . $chicken_sandwich->logo) }}" alt="logo" class="max-w-1/2 max-h-1/2">
                         </td>
                         <td class="flex flex-col items-center gap-8 text-white py-4">
-                            <img src="{{ $chicken_sandwich->image }}" alt="chicken sandwich" class="max-w-1/2 max-h-1/2">
+                            <img src="{{ asset('storage/' . $chicken_sandwich->image) }}" alt="chicken sandwich" class="max-w-1/2 max-h-1/2">
                         </td>
                     </tr>
 
