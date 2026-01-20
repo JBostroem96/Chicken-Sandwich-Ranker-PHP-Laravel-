@@ -70,7 +70,7 @@
             <div class="mt-1 text-sm">Please provide a company.</div>
         </div>
         {{-- WIP image and logo upload feature --}}
-        <!-- 
+        
         {{-- Image --}}
         <div class="mb-4">
             <label for="image" class="block mb-2 font-extrabold text-lg text-gray-800">Image</label>
@@ -78,7 +78,7 @@
                 class="block w-full text-gray-800" {{ $isUpdate ? '' : 'required' }}>
             <div class="mt-1 text-sm">Please provide a valid image.</div>
         </div>
-
+         
         {{-- Logo --}}
         <div class="mb-4">
             <label for="logo" class="block mb-2 font-extrabold text-lg text-gray-800">Logo</label>
@@ -86,7 +86,7 @@
                 class="block w-full text-gray-800" {{ $isUpdate ? '' : 'required' }}>
             <div class="mt-1 text-sm">Please provide a valid logo.</div>
         </div>
-        !-->
+        
         {{-- Submit button --}}
         <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
             <button type="submit"

@@ -44,6 +44,11 @@ class ChickenSandwich extends Model {
         return $this->id;
     }
 
+    public function getImage(): string {
+
+        return $this->image;
+    }
+
     public function getCompany(): string {
 
         return $this->company;

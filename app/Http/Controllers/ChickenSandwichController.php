@@ -9,7 +9,6 @@ use Illuminate\Validation\Rule;
 use App\Services\ChickenSandwichManager;
 use App\Models\ChickenSandwich;
 
-
 /**
  * This class' purpose is to perform different CRUD operations
  * for Chicken Sandwiches.
@@ -27,6 +26,26 @@ class ChickenSandwichController extends Controller {
     }
 
     /**
+     * Validate the data
+     *
+     * @param Request $request              the request object that contains the input
+     */
+    public function validate(Request $request) { 
+
+        $sharedRulesForImages = ['required',
+                    'image',
+                    'mimes:jpg,jpeg,png,webp',
+                    'max:2048'];
+            
+
+        $request->validate([
+                'name' => 'required|string|max:100|unique:chicken_sandwiches,name',
+                'company' => 'nullable|string|max:1000',
+                'image' => $sharedRulesForImages,
+                'logo' => $sharedRulesForImages
+        ]);
+    }
+    /**
      * Validate the data, then insert it, and then
      * redirect to the corresponding page
      *
@@ -34,15 +53,22 @@ class ChickenSandwichController extends Controller {
      */
     public function store(Request $request): RedirectResponse {
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:100|unique:chicken_sandwiches,name',
-            'company' => 'nullable|string|max:1000',
-        ]);
-
         try {
 
-            ChickenSandwich::create($validated);
+            //method call to validate the input
+            $this->validate($request);
 
+            $image_path = $request->file('image')->store('images', 'public');
+            $logo_path = $request->file('logo')->store('logos', 'public');
+
+            ChickenSandwich::create([
+
+                'name' => $request['name'],
+                'company' => $request['company'],
+                'image' => $image_path,
+                'logo' => $logo_path
+            ]);
+        
             return redirect()->route('chicken-sandwiches.index')->with('success', 'New chicken sandwich cooked up!');
 
         } catch (Exception $e) {
