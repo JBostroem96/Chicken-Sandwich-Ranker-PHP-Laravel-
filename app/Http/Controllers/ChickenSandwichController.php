@@ -85,11 +85,34 @@ class ChickenSandwichController extends Controller {
      */
     public function index(Request $request): View {
 
-        $all_chicken_sandwiches = $request->has('search-term')
-            ? ChickenSandwich::where($request->input('search-type', 'name'), 'like', '%' . $request->input('search-term') . '%')->get()
-            : ChickenSandwich::all();
-
+        $all_chicken_sandwiches = null;
         
+        if ($request->has('search')) {
+
+            if ($request->has('min_score')) {
+
+                $min_score = $request->input('min_score');
+            }
+
+            if ($request->has('max_score')) {
+
+                $max_score = $request->input('max_score');
+            }
+            
+            if ($request->input('search-type') === 'score') {
+
+                $all_chicken_sandwiches = ChickenSandwich::whereBetween($request->input('search-type'), [$min_score, $max_score])->get();
+
+            } else {
+
+                $all_chicken_sandwiches = ChickenSandwich::where('name', $request->input('name'))->get();
+            }
+           
+        } else {
+
+            $all_chicken_sandwiches = ChickenSandwich::all();
+        } 
+            
         $ratings = [];
 
         //if the user is signed in, assign the logged in user to this user variable

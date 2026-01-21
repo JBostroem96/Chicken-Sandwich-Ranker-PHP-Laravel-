@@ -41,7 +41,7 @@
         <div class="flex flex-col md:flex-row-reverse gap-4 mb-8">
             
             <div class="flex-1 border-4 border-orange-400 bg-orange-500 rounded-md text-white text-[30px] font-extrabold p-20 text-center">
-                <p>RATED: <br>{{ round($chicken_sandwich->average_score) }}/10</p>
+                <p>RATED: <br>{{ round($chicken_sandwich->average_score, 1) }}/10</p>
                 <p class="mt-4">NUMBER OF RATINGS: {{ $chicken_sandwich->entries }}</p>
             </div>
 
