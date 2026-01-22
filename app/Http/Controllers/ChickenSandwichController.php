@@ -91,8 +91,8 @@ class ChickenSandwichController extends Controller {
 
             $request->validate([
 
-                'min_score' => 'numeric',
-                'max_score' => 'numeric',
+                'min_score' => 'nullable|numeric',
+                'max_score' => 'nullable|numeric',
             ]);
 
             $min_score = $request->input('min_score');
