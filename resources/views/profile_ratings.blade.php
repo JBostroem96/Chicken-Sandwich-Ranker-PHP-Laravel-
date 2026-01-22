@@ -38,7 +38,7 @@
                             <input type='numeric' name='new_score' pattern='[1-9]|10' class="rounded-md border-gray-500 focus:border-orange-500 focus:ring-orange-500 px-3 py-2 text-gray-800 placeholder-gray-400">
                             <div class="flex flex-col items-center">
                                 <label for="review" class="font-extrabold text-orange-600">Review</label>
-                                <textarea rows="2" cols="20" name="review"
+                                <textarea rows="6" cols="40" name="review"
                                     class="mt-2 p-2 border border-orange-400 rounded-lg">{{ old('review', $rating->pivot->review) }}</textarea>
                             </div>
                             <button class="bg-orange-500 hover:bg-orange-600 border-4 border-orange-300 rounded-xl px-6 py-2 font-bold text-white text-lg mb-3 sm:mb-0" type='submit' id='edit-score'

@@ -85,7 +85,7 @@ class UserChickenSandwichController extends Controller {
         
         $ratings = $this->fetchRatings();
 
-        return view('profileRatings', compact('ratings'));
+        return view('profile_ratings', compact('ratings'));
     }
 
     /**
@@ -96,7 +96,7 @@ class UserChickenSandwichController extends Controller {
         
         $ratings = $this->fetchRatings();
 
-        return view('profileRatings', compact('id', 'ratings'));
+        return view('profile_ratings', compact('id', 'ratings'));
     }
 
     /** 
@@ -121,9 +121,9 @@ class UserChickenSandwichController extends Controller {
     public function update(Request $request, $id): RedirectResponse {
 
         $validated = $request->validate([
-                'new_score' => 'required|integer|min:1|max:10',
-                'review' => 'nullable|string|min:30|max:1000',
-            ]);
+            'new_score' => 'required|integer|min:1|max:10',
+            'review' => 'nullable|string|min:30|max:1000',
+        ]);
 
         try {
 
