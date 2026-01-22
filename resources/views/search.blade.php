@@ -4,6 +4,13 @@
 
 @section('content')
     
+    @if ($errors->has('min_score') || $errors->has('max_score'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {{ $errors->first('min_score') }}
+            </br>
+            {{ $errors->first('max_score') }}
+        </div>
+    @endif
     <form method="GET" class="border-2 p-5 border-brandOrange rounded-lg" action="{{ route('chicken-sandwiches.index') }}">
         <div class="p-3 text-brandOrange font-bold" x-data="{ type: 'name' }">
             

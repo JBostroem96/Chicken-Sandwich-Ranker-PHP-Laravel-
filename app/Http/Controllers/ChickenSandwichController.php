@@ -85,6 +85,15 @@ class ChickenSandwichController extends Controller {
      */
     public function index(Request $request): View {
 
+        if ($request->input('min_score') || $request->input('max_score')) {
+
+            $request->validate([
+
+                'min_score' => 'numeric',
+                'max_score' => 'numeric',
+            ]);
+        }
+        
         $all_chicken_sandwiches = null;
         
         if ($request->has('search')) {
@@ -144,10 +153,7 @@ class ChickenSandwichController extends Controller {
 
             $chicken_sandwich = ChickenSandwich::findOrFail($id);
             
-            if ($chicken_sandwich) {
-
-                $chicken_sandwich->delete();
-            }
+            $chicken_sandwich->delete();
             
             return redirect()->route('chicken-sandwiches.index')->with('success', 'Deleted!');
         
