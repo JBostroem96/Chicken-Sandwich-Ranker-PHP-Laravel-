@@ -44,6 +44,11 @@ class ChickenSandwichController extends Controller {
         ]);
     }
 
+    /**
+     * Store the images
+     *
+     * @param Request $request              the request object that contains the input
+     */
     public function storeImages(Request $request): Array {
 
         $images = [];
@@ -237,5 +242,4 @@ class ChickenSandwichController extends Controller {
         $chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
         return view('submit', compact('chicken_sandwich'));
     }
-
 }
