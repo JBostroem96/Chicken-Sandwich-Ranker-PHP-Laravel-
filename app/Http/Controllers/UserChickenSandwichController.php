@@ -17,42 +17,41 @@ class UserChickenSandwichController extends Controller {
 
     private $chicken_sandwich;
 
-
     public function __construct() {
 
         $this->chicken_sandwich = new ChickenSandwich();
     }
 
    /**
-    * Validates and inserts the new entry, and then updates the score
+    * Validates and inserts the new score, and then updates the score
     *
     * @param Request $request                   the request object containing the input                 
     */
    public function store(Request $request): RedirectResponse {
 
-        try {
-
-            $validated = $request->validate([
+        $validated = $request->validate([
                 'score' => 'required|integer|min:1|max:10',
                 'chicken_sandwich_id' => 'required|integer|exists:chicken_sandwiches,id',
                 'review' => 'nullable|string|max:1000',
-            ]);
+        ]);
             
-            $chicken_sandwich = ChickenSandwich::findOrFail($validated['chicken_sandwich_id']);
-            $user_id = auth()->id();
+        $chicken_sandwich = ChickenSandwich::findOrFail($validated['chicken_sandwich_id']);
+        
+        $user_id = auth()->id();
 
-            // Check if the user already has a review
-            $existing_entry = UserChickenSandwich::where('user_id', $user_id)
-                ->where('chicken_sandwich_id', $chicken_sandwich->id)
-                ->first();
+        // Check if the user already has a review
+        $existing_entry = UserChickenSandwich::where('user_id', $user_id)
+            ->where('chicken_sandwich_id', $chicken_sandwich->id)
+            ->first();
 
-            if ($existing_entry) {
-                // User already has a review; do nothing here
-                return redirect()
-                    ->route('chicken-sandwiches.index')
-                    ->with('error', 'You have already submitted a review for this sandwich.');
-            }
+        if ($existing_entry) {
+            // User already has a review; do nothing here
+            return redirect()
+                ->route('chicken-sandwiches.index')
+                ->with('error', 'You have already submitted a review for this sandwich.');
+        }
 
+        try {
             // Create new review
             UserChickenSandwich::create([
                 'user_id' => $user_id,
@@ -64,10 +63,6 @@ class UserChickenSandwichController extends Controller {
             // Update sandwich totals only for new reviews
             $chicken_sandwich->updateScore($validated);
 
-            return redirect()
-                ->route('chicken-sandwiches.index')
-                ->with('success', 'Rating submitted!');
-
         } catch (\Exception $e) {
 
             \Log::error("Submit error: " . $e->getMessage());
@@ -76,6 +71,10 @@ class UserChickenSandwichController extends Controller {
                 ->route('chicken-sandwiches.index')
                 ->with('error', 'Failed to submit rating.');
         }
+
+        return redirect()
+                ->route('chicken-sandwiches.index')
+                ->with('success', 'Rating submitted!');
     }
 
     /**
