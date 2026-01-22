@@ -26,11 +26,11 @@ class ChickenSandwichController extends Controller {
     }
 
     /**
-     * Validate the data
+     * Validate the images
      *
      * @param Request $request              the request object that contains the input
      */
-    public function validate(Request $request) { 
+    public function validateImages(Request $request) { 
 
         $sharedRulesForImages = ['required',
                     'image',
@@ -39,12 +39,21 @@ class ChickenSandwichController extends Controller {
             
 
         $request->validate([
-                'name' => 'required|string|max:100|unique:chicken_sandwiches,name',
-                'company' => 'nullable|string|max:1000',
                 'image' => $sharedRulesForImages,
                 'logo' => $sharedRulesForImages
         ]);
     }
+
+    public function storeImages(Request $request): Array {
+
+        $images = [];
+
+        $images[] = $request->file('image')->store('images', 'public');
+        $images[] = $request->file('logo')->store('logos', 'public');
+        
+        return $images;
+    }
+
     /**
      * Validate the data, then insert it, and then
      * redirect to the corresponding page
@@ -53,29 +62,34 @@ class ChickenSandwichController extends Controller {
      */
     public function store(Request $request): RedirectResponse {
 
+        $request->validate([
+
+            'name' => 'string|required',
+            'company' => 'string|required',
+        ]);
+
+        //method call to validate the images
+        $this->validateImages($request);
+
         try {
 
-            //method call to validate the input
-            $this->validate($request);
-
-            $image_path = $request->file('image')->store('images', 'public');
-            $logo_path = $request->file('logo')->store('logos', 'public');
+            $images = $this->storeImages($request);
 
             ChickenSandwich::create([
 
                 'name' => $request['name'],
                 'company' => $request['company'],
-                'image' => $image_path,
-                'logo' => $logo_path
+                'image' => $images[0],
+                'logo' => $images[1]
             ]);
-        
-            return redirect()->route('chicken-sandwiches.index')->with('success', 'New chicken sandwich cooked up!');
-
+            
         } catch (Exception $e) {
 
             Log::error("Insert error: " . $e->getMessage());
             return redirect()->back()->with('error', 'Something went wrong.');
         }
+
+        return redirect()->route('chicken-sandwiches.index')->with('success', 'New chicken sandwich cooked up!');
     }
 
     /**
@@ -159,17 +173,20 @@ class ChickenSandwichController extends Controller {
      */
     public function update(Request $request): RedirectResponse {
 
+        $request->validate([
+
+            'chicken-sandwich-update' => 'required|integer|exists:chicken_sandwiches,id',
+        ]);
+
         $chicken_sandwich_id = $request->input('chicken-sandwich-update');
 
-        try {
+        $chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
+         
+        //method call to validate the images
+        $this->validateImages($request);
 
-            $this->validate($request);
-
-            $image_path = $request->file('image')->store('images', 'public');
-            $logo_path = $request->file('logo')->store('logos', 'public');
-
-            //validate the input
-            $validation = $request->validate([
+        //validate the input
+        $validation = $request->validate([
 
             //starting with 'name'
             'name' => [
@@ -185,26 +202,30 @@ class ChickenSandwichController extends Controller {
                     ->ignore($chicken_sandwich_id),
             ],
             'company' => ['required', 'string'], 
-            ]);
-
-        $chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
-
-        $chicken_sandwich->update([
-            'name' => $validation['name'],
-            'company' => $validation['company'],
-            'image' => $image_path,
-            'logo' => $logo_path 
         ]);
 
-        return redirect()->back()->with('success', 'Entry updated!');
+        try {
 
-        } catch (Exception $error) {
+            $images = $this->storeImages($request);
+
+            $chicken_sandwich->update([
+                'name' => $validation['name'],
+                'company' => $validation['company'],
+                'image' => $images[0],
+                'logo' => $images[1]
+            ]);
+
+
+        } catch (Exception $e) {
 
             \Log::error("Update error: " . $e->getMessage());
 
-            return redirect()->back()->with('success', 'Entry failed to update');
-        }   
+            return redirect()->back()->with('error', 'Entry failed to update');
+        }  
+
+        return redirect()->back()->with('success', 'Entry updated!');
     }
+    
 
     /**
      * Return the view of the entry that is being edited
