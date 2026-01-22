@@ -163,6 +163,11 @@ class ChickenSandwichController extends Controller {
 
         try {
 
+            $this->validate($request);
+
+            $image_path = $request->file('image')->store('images', 'public');
+            $logo_path = $request->file('logo')->store('logos', 'public');
+
             //validate the input
             $validation = $request->validate([
 
@@ -182,14 +187,22 @@ class ChickenSandwichController extends Controller {
             'company' => ['required', 'string'], 
             ]);
 
-        return $this->chicken_sandwich->updateEntry($chicken_sandwich_id, $validation); 
+        $chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
+
+        $chicken_sandwich->update([
+            'name' => $validation['name'],
+            'company' => $validation['company'],
+            'image' => $image_path,
+            'logo' => $logo_path 
+        ]);
+
+        return redirect()->back()->with('success', 'Entry updated!');
 
         } catch (Exception $error) {
 
-            \Log::error("Delete error: " . $e->getMessage());
+            \Log::error("Update error: " . $e->getMessage());
 
-            return redirect()->route('chicken-sandwiches.edit', $chicken_sandwich_id)
-                ->with('error', 'Something went wrong.');
+            return redirect()->back()->with('success', 'Entry failed to update');
         }   
     }
 
