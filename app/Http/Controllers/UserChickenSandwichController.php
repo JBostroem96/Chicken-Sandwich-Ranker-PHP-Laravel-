@@ -45,7 +45,8 @@ class UserChickenSandwichController extends Controller {
             ->first();
 
         if ($existing_entry) {
-            // User already has a review; do nothing here
+
+            // User already has a review; return message
             return redirect()
                 ->route('chicken-sandwiches.index')
                 ->with('error', 'You have already submitted a review for this sandwich.');
@@ -119,16 +120,17 @@ class UserChickenSandwichController extends Controller {
      */
     public function update(Request $request, $id): RedirectResponse {
 
-        try {
-
-            $validated = $request->validate([
+        $validated = $request->validate([
                 'new_score' => 'required|integer|min:1|max:10',
+                'review' => 'nullable|string|min:30|max:1000',
             ]);
+
+        try {
 
             $user_chicken_sandwich = $this->fetchUserChickenSandwich($id);
 
             $old_score = $user_chicken_sandwich->score;
-            $user_chicken_sandwich->update([ 'score' => $validated['new_score'], ]);
+            $user_chicken_sandwich->update([ 'score' => $validated['new_score'], 'review' => $validated['review']]);
 
             $this->chicken_sandwich = ChickenSandwich::findOrFail($id);
 

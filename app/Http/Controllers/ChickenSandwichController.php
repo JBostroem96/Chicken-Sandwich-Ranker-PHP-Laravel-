@@ -150,7 +150,6 @@ class ChickenSandwichController extends Controller {
      * Validate the data and then delete it.
      * It then redirects with the appropriate message.
      *
-     * @param Request $request              the request object containing the chicken sandwich entry to be deleted
      * @param int $id               the entry to be deleted
      */
     public function destroy($id): RedirectResponse {
@@ -231,7 +230,6 @@ class ChickenSandwichController extends Controller {
         return redirect()->back()->with('success', 'Entry updated!');
     }
     
-
     /**
      * Return the view of the entry that is being edited
      *　
