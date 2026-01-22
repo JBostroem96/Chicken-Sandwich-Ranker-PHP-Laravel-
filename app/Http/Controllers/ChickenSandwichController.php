@@ -85,6 +85,8 @@ class ChickenSandwichController extends Controller {
      */
     public function index(Request $request): View {
 
+        $all_chicken_sandwiches = null;
+
         if ($request->input('min_score') || $request->input('max_score')) {
 
             $request->validate([
@@ -92,35 +94,20 @@ class ChickenSandwichController extends Controller {
                 'min_score' => 'numeric',
                 'max_score' => 'numeric',
             ]);
-        }
-        
-        $all_chicken_sandwiches = null;
-        
-        if ($request->has('search')) {
 
-            if ($request->has('min_score')) {
+            $min_score = $request->input('min_score');
+            $max_score = $request->input('max_score');
 
-                $min_score = $request->input('min_score');
-            }
+            $all_chicken_sandwiches = ChickenSandwich::whereBetween($request->input('search-type'), [$min_score, $max_score])->get();
 
-            if ($request->has('max_score')) {
+        } elseif ($request->input('search-type') === 'name' && !$request->has('view-all')) {
 
-                $max_score = $request->input('max_score');
-            }
-            
-            if ($request->input('search-type') === 'score') {
+            $all_chicken_sandwiches = ChickenSandwich::where('name', $request->input('name'))->get();
 
-                $all_chicken_sandwiches = ChickenSandwich::whereBetween($request->input('search-type'), [$min_score, $max_score])->get();
-
-            } else {
-
-                $all_chicken_sandwiches = ChickenSandwich::where('name', $request->input('name'))->get();
-            }
-           
         } else {
 
             $all_chicken_sandwiches = ChickenSandwich::all();
-        } 
+        }
             
         $ratings = [];
 
