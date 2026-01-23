@@ -15,16 +15,6 @@ use App\Models\ChickenSandwich;
  */
 class ChickenSandwichController extends Controller {
 
-    private $chicken_sandwich;
-
-    /**
-     * Initialize a new Chicken Sandwich object
-     */
-    public function __construct() {
-
-        $this->chicken_sandwich = new ChickenSandwich();
-    }
-
     /**
      * Validate the images
      *
