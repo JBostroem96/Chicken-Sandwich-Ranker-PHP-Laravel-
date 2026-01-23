@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\UserChickenSandwich;
 use App\Http\Controllers\ChickenSandwichController;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 /**
  * This class' purpose is to perform CRUD operations on Chicken Sandwich entries
@@ -20,6 +21,15 @@ class UserChickenSandwichController extends Controller {
     public function __construct() {
 
         $this->chicken_sandwich = new ChickenSandwich();
+    }
+
+    /**
+     * return the logged in user id
+     *
+     */
+    public function getLoggedInUserId(): int {
+
+        return auth()->id(); 
     }
 
    /**
@@ -37,7 +47,7 @@ class UserChickenSandwichController extends Controller {
             
         $chicken_sandwich = ChickenSandwich::findOrFail($validated['chicken_sandwich_id']);
         
-        $user_id = auth()->id();
+        $user_id = $this->getLoggedInUserId();
 
         // Check if the user already has a review
         $existing_entry = UserChickenSandwich::where('user_id', $user_id)
@@ -93,10 +103,10 @@ class UserChickenSandwichController extends Controller {
      * @param int $id               the entry to be edited
      */
     public function edit($id): View {
-        
-        $ratings = $this->fetchRatings();
 
-        return view('profile_ratings', compact('id', 'ratings'));
+        $rating = $this->fetchUserChickenSandwich($id);
+
+        return view('edit_rating', compact('rating'));
     }
 
     /** 
@@ -156,7 +166,7 @@ class UserChickenSandwichController extends Controller {
      */
     private function fetchUserChickenSandwich($id): UserChickenSandwich {
 
-        $userId = auth()->id();
+        $userId = $this->getLoggedInUserId();
 
         //SQL Query to fetch the entry
         $entry = UserChickenSandwich::where('user_id', $userId)

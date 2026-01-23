@@ -14,6 +14,7 @@ class UserChickenSandwich extends Pivot {
     protected $table = 'user_chicken_sandwiches';
 
     protected $fillable = [
+        'id',
         'user_id',
         'chicken_sandwich_id',
         'score',
