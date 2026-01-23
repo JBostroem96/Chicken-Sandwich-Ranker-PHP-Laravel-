@@ -16,22 +16,6 @@ use Illuminate\Support\Facades\Log;
  */
 class UserChickenSandwichController extends Controller {
 
-    private $chicken_sandwich;
-
-    public function __construct() {
-
-        $this->chicken_sandwich = new ChickenSandwich();
-    }
-
-    /**
-     * return the logged in user id
-     *
-     */
-    public function getLoggedInUserId(): int {
-
-        return auth()->id(); 
-    }
-
    /**
     * Validates and inserts the new score, and then updates the score
     *
@@ -42,12 +26,12 @@ class UserChickenSandwichController extends Controller {
         $validated = $request->validate([
                 'score' => 'required|integer|min:1|max:10',
                 'chicken_sandwich_id' => 'required|integer|exists:chicken_sandwiches,id',
-                'review' => 'nullable|string|max:1000',
+                'review' => 'nullable|string|min:30|max:1000',
         ]);
             
         $chicken_sandwich = ChickenSandwich::findOrFail($validated['chicken_sandwich_id']);
         
-        $user_id = $this->getLoggedInUserId();
+        $user_id = auth()->id();
 
         // Check if the user already has a review
         $existing_entry = UserChickenSandwich::where('user_id', $user_id)
@@ -100,11 +84,11 @@ class UserChickenSandwichController extends Controller {
 
     /**
      * Show the form for editing the user's rating for this entry
-     * @param int $id               the entry to be edited
+     * @param int $chicken_sandwich_id              the entry to be edited
      */
-    public function edit($id): View {
+    public function edit($chicken_sandwich_id): View {
 
-        $rating = $this->fetchUserChickenSandwich($id);
+        $rating = $this->fetchUserChickenSandwich($chicken_sandwich_id);
 
         return view('edit_rating', compact('rating'));
     }
@@ -126,9 +110,9 @@ class UserChickenSandwichController extends Controller {
      * Update the chicken sandwich rating
      *
      * @param  Request  $request                the request object containing the input
-     * @param  int  $id             the entry to be updated
+     * @param  int  $chicken_sandwich_id             the entry to be updated
      */
-    public function update(Request $request, $id): RedirectResponse {
+    public function update(Request $request, $chicken_sandwich_id): RedirectResponse {
 
         $validated = $request->validate([
             'new_score' => 'required|integer|min:1|max:10',
@@ -137,12 +121,12 @@ class UserChickenSandwichController extends Controller {
 
         try {
 
-            $user_chicken_sandwich = $this->fetchUserChickenSandwich($id);
+            $user_chicken_sandwich = $this->fetchUserChickenSandwich($chicken_sandwich_id);
 
             $old_score = $user_chicken_sandwich->score;
             $user_chicken_sandwich->update([ 'score' => $validated['new_score'], 'review' => $validated['review']]);
 
-            $this->chicken_sandwich = ChickenSandwich::findOrFail($id);
+            $this->chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
 
             // Update the sandwich's score based on the new rating
             $this->chicken_sandwich->updateScoreOnEdit($validated, $old_score);
@@ -164,13 +148,11 @@ class UserChickenSandwichController extends Controller {
     /**
      *  retrieve the chicken sandwich by user and entry id
      */
-    private function fetchUserChickenSandwich($id): UserChickenSandwich {
-
-        $userId = $this->getLoggedInUserId();
+    private function fetchUserChickenSandwich($chicken_sandwich_id): UserChickenSandwich {
 
         //SQL Query to fetch the entry
-        $entry = UserChickenSandwich::where('user_id', $userId)
-            ->where('chicken_sandwich_id', $id)
+        $entry = UserChickenSandwich::where('user_id', auth()->id())
+            ->where('chicken_sandwich_id', $chicken_sandwich_id)
             ->firstOrFail();
 
         return $entry;
@@ -179,21 +161,21 @@ class UserChickenSandwichController extends Controller {
     /**
      * Verify that the entry belongs to the user and then delete it by id
      *
-     * @param int $id               the entry to be deleted
+     * @param int $chicken_sandwich_id               the entry to be deleted
      */
-    public function destroy($id): RedirectResponse {
+    public function destroy($chicken_sandwich_id): RedirectResponse {
 
         try {
 
-            $entry = $this->fetchUserChickenSandwich($id);
+            $entry = $this->fetchUserChickenSandwich($chicken_sandwich_id);
 
             $old_score = $entry->score;
             $entry->delete();
 
-            $this->chicken_sandwich = ChickenSandwich::findOrFail($id);
+            $chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
 
             // Update the sandwich's score based on the deleted rating
-            $this->chicken_sandwich->updateScoreOnDelete($old_score);
+            $chicken_sandwich->updateScoreOnDelete($old_score);
   
             return redirect()
                 ->route('profile.ratings.index')
