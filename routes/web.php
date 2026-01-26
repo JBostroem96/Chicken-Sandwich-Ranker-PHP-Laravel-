@@ -19,10 +19,17 @@ Route::controller(PageViewController::class)->group(function () {
     Route::get('/login', 'login')->name('login');
     Route::get('/password-reset', 'password')->name('password.reset');
 
+    Route::middleware(['auth', 'admin'])->group(function () {
+
+        Route::get('/submit', 'submit')->name('submit');
+        Route::post('/submit', [ChickenSandwichController::class, 'store'])->name('store');
+        Route::get('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit']);
+        Route::post('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit']);
+        Route::post('/delete', [ChickenSandwichController::class, 'destroy']);
+    });
     // middleware/authenticated route, ensures only signed in users can access
     Route::middleware(['auth'])->group(function () {
-        Route::get('/submit', 'submit')->name('submit');
-        Route::post('/submit', [UserChickenSandwichController::class, 'store'])->name('store');
+       
         Route::get('/profile/change-password', [PageViewController::class, 'changePassword'])->name('profile.change-password');
         Route::post('/profile/change-password', [User::class, 'changePassword'])->name('profile.password.update');
         Route::prefix('profile')->group(function () {
