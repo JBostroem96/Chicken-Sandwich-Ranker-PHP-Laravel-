@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\RedirectResponse;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * User model representing application users
@@ -21,6 +22,7 @@ class User extends Authenticatable {
     use HasFactory;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable

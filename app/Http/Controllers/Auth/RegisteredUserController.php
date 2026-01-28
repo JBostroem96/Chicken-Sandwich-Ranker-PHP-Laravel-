@@ -41,10 +41,13 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        //assign role using Spatie
+        $user->assignRole('user');
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect()->route('chicken-sandwiches');
+        return redirect()->route('/chicken-sandwiches');
     }
 }

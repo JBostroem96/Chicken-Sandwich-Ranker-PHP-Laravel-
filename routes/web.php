@@ -7,6 +7,7 @@ use App\Http\Controllers\ChickenSandwichController;
 use App\Http\Controllers\UserChickenSandwichController;
 use App\Models\User;
 
+
 // Home page
 Route::get('/', [PageViewController::class, 'home'])->name('home');
 
@@ -19,7 +20,7 @@ Route::controller(PageViewController::class)->group(function () {
     Route::get('/login', 'login')->name('login');
     Route::get('/password-reset', 'password')->name('password.reset');
 
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::get('/submit', 'submit')->name('submit');
         Route::post('/submit', [ChickenSandwichController::class, 'store'])->name('store');
