@@ -11,6 +11,10 @@ use App\Models\User;
 // Home page
 Route::get('/', [PageViewController::class, 'home'])->name('home');
 
+Route::get('/submit', [PageViewController::class, 'submit'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('submit');
+    
 // Group all routes handled by PageViewController
 Route::controller(PageViewController::class)->group(function () {
     
@@ -22,7 +26,7 @@ Route::controller(PageViewController::class)->group(function () {
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
 
-        Route::get('/submit', 'submit')->name('submit');
+       
         Route::post('/submit', [ChickenSandwichController::class, 'store'])->name('store');
         Route::get('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit']);
         Route::post('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit']);
