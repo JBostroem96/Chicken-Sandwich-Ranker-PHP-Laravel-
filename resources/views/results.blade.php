@@ -104,12 +104,11 @@
                                     <h2 class="text-green-600 font-bold text-xl">RATED</h2>
                                 @endif
 
-                                @if (auth()->user()->isAdmin())
+                                @role ('admin')
                                     <form action="{{ route('chicken-sandwiches.destroy', $chicken_sandwich->id) }}" method="POST" class="mt-4">
                                         @csrf
                                         
                                         @method('DELETE')
-                                        <input type="hidden" name="chicken_sandwich_id_to_delete" value="{{ $chicken_sandwich->id }}">
                                         <button type="submit"
                                                 class="bg-orange-500 border-4 border-orange-400 text-white font-extrabold text-lg px-4 py-2 rounded-xl mt-2 hover:shadow-md hover:shadow-red-500">
                                             DELETE
@@ -120,7 +119,7 @@
                                     value="{{ $chicken_sandwich->id }}" name="chicken_sandwich_id" class="inline-block mt-2 bg-orange-500 border-4 border-orange-400 text-white font-extrabold text-lg px-4 py-2 rounded-xl hover:shadow-md hover:shadow-orange-500">
                                         EDIT
                                     </a>
-                                @endif
+                                @endrole
                             @else
                                 <h2 class="text-black font-bold text-xl mt-3">Login to rate!</h2>
                             @endauth

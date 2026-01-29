@@ -14,7 +14,10 @@ Route::get('/', [PageViewController::class, 'home'])->name('home');
 Route::get('/submit', [PageViewController::class, 'submit'])
     ->middleware(['auth', 'role:admin'])
     ->name('submit');
-    
+
+Route::resource('chicken-sandwiches', ChickenSandwichController::class);
+
+
 // Group all routes handled by PageViewController
 Route::controller(PageViewController::class)->group(function () {
     
@@ -26,11 +29,10 @@ Route::controller(PageViewController::class)->group(function () {
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
 
-       
         Route::post('/submit', [ChickenSandwichController::class, 'store'])->name('store');
         Route::get('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit']);
         Route::post('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit']);
-        Route::post('/delete', [ChickenSandwichController::class, 'destroy']);
+        Route::delete('/delete/{id}', [ChickenSandwichController::class, 'destroy']);
     });
     // middleware/authenticated route, ensures only signed in users can access
     Route::middleware(['auth'])->group(function () {
@@ -54,7 +56,7 @@ Route::controller(PageViewController::class)->group(function () {
 });
 
 Route::resource('user-chicken-sandwiches', UserChickenSandwichController::class);
-Route::resource('chicken-sandwiches', ChickenSandwichController::class);
+
 
 Route::resource('user', UserController::class);
 
