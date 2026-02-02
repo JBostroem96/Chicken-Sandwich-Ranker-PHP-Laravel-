@@ -28,6 +28,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ->name('chicken-sandwiches.destroy');     
 });    
 
+//The list of chicken sandwiches is accessed by anyone
+Route::get('/chicken-sandwiches', [ChickenSandwichController::class, 'index'])->name('chicken-sandwiches.index');
+
 // Group all routes handled by PageViewController
 Route::controller(PageViewController::class)->group(function () {
     
