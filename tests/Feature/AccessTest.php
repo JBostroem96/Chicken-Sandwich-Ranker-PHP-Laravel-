@@ -74,21 +74,29 @@ class AccessTest extends TestCase {
      *
      * @param User|null $user               the user or null object
      */
-    public function insertTestEntry(?User $user): TestResponse {
-
-        $test_entry_data = ['name' => 'test',
-                'company' => 'test', 
-                'image' => UploadedFile::fake()->image('image.jpg'),
-                'logo' => UploadedFile::fake()->image('logo.jpg')];
+    public function insertTestEntry(?User $user, Array $test_data): TestResponse {
 
         if ($user !== null) {
 
-            return $this->actingAs($user)->post('/submit', $test_entry_data);
+            return $this->actingAs($user)->post('/submit', $test_data);
             
         } else {
 
-            return $this->post('/submit', $test_entry_data);
+            return $this->post('/submit', $test_data);
         }
+    }
+
+    /**
+     * create the test data and return it
+     */
+    public function createTestData(): array {
+
+        Storage::fake('public');
+
+        return $test_entry_data = ['name' => 'test',
+            'company' => 'test', 
+            'image' => UploadedFile::fake()->image('image.jpg'),
+            'logo' => UploadedFile::fake()->image('logo.jpg')];
     }
 
     /**
@@ -96,20 +104,19 @@ class AccessTest extends TestCase {
      */
     public function test_admin_can_submit(): void {
         
-        Storage::fake('public');
-
         $admin = $this->getUser();
         $admin->assignRole('admin');
 
-        $this->insertTestEntry($admin)->assertStatus(302);
+        $test_data = $this->createTestData();
+
+        $this->insertTestEntry($admin, $test_data)->assertStatus(302);
 
         Storage::disk('public')->assertExists('logos/');
         Storage::disk('public')->assertExists('images/');
 
-        $last_inserted_entry = ChickenSandwich::latest()->first();
-
         $this->assertDatabaseHas('chicken_sandwiches', [
-            'id' => $last_inserted_entry->id
+            'name' => $test_data['name'],
+            'company' => $test_data['company'],
         ]);
     }
 
@@ -118,9 +125,16 @@ class AccessTest extends TestCase {
      */
     public function test_user_cannot_submit(): void {
         
+        $test_data = $this->createTestData();
+
         $user = $this->getUser();
 
-        $this->insertTestEntry($user)->assertForbidden();
+        $this->insertTestEntry($user, $test_data)->assertForbidden();
+
+        $this->assertDatabaseMissing('chicken_sandwiches', [
+            'name' => $test_data['name'],
+            'company' => $test_data['company']
+        ]);
     }
 
     /**
@@ -128,10 +142,13 @@ class AccessTest extends TestCase {
      */
     public function test_guest_cannot_submit(): void {
         
-        $this->insertTestEntry(null)->assertRedirect(route('login'));
-        
+        $test_data = $this->createTestData();
+
+        $this->insertTestEntry(null, $test_data)->assertRedirect(route('login'));
+
         $this->assertDatabaseMissing('chicken_sandwiches', [
-            'id' => $entry->id
+            'name' => $test_data['name'],
+            'company' => $test_data['company']
         ]);
     }
 
@@ -155,9 +172,9 @@ class AccessTest extends TestCase {
     }
 
     /**
-     * Test that users cannot insert the newly inserted chicken sandwich entry
+     * Test that users cannot delete the newly inserted chicken sandwich entry
      */
-    public function test_users_cannot_delete(): void {
+    public function test_user_cannot_delete(): void {
 
         $user = $this->getUser();
        
@@ -174,13 +191,14 @@ class AccessTest extends TestCase {
     }
 
     /**
-     * Test that guests cannot insert the newly inserted chicken sandwich entry
+     * Test that guests cannot delete the newly inserted chicken sandwich entry
      */
     public function test_guests_cannot_delete(): void {
 
         $entry = ChickenSandwich::factory()->create();
         
-        $response = $this->delete("/chicken-sandwiches/{$entry->id}"); 
+        $response = $this->delete("/chicken-sandwiches/{$entry->id}");
+
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('chicken_sandwiches', [
