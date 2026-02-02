@@ -5,11 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * ChickenSandwich model representing chicken sandwich entries
  */
 class ChickenSandwich extends Model {
+
+    use HasFactory;
 
     protected $fillable = [
         'id',
