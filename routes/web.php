@@ -11,24 +11,23 @@ use App\Models\User;
 // Home page
 Route::get('/', [PageViewController::class, 'home'])->name('home');
 
-Route::get('/submit', [PageViewController::class, 'submit'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('submit');
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
-Route::post('/submit', [ChickenSandwichController::class, 'store'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('chicken-sandwiches.store');
+    Route::get('/submit', [PageViewController::class, 'submit'])->name('submit');
 
-Route::put('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'update'])
-    ->middleware(['auth', 'role:admin'])->name('chicken-sandwiches.update');
+    Route::post('/submit', [ChickenSandwichController::class, 'store'])->name('chicken-sandwiches.store');
 
-Route::get('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('chicken-sandwiches.update');
+    Route::put('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'update'])
+        ->name('chicken-sandwiches.update');
 
+    Route::get('/chicken-sandwiches/{id}/edit', [ChickenSandwichController::class, 'edit'])
+        ->name('chicken-sandwiches.edit');
 
-Route::delete('/chicken-sandwiches/{id}', [ChickenSandwichController::class, 'destroy'])
-    ->middleware(['auth', 'role:admin'])->name('chicken-sandwiches.destroy');
+    Route::delete('/chicken-sandwiches/{id}', [ChickenSandwichController::class, 'destroy'])
+        ->name('chicken-sandwiches.destroy');     
+});
+        
+        
 
 Route::get('/chicken-sandwiches', [ChickenSandwichController::class, 'index'])->name('chicken-sandwiches.index');
 
