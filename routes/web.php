@@ -11,7 +11,6 @@ use App\Models\User;
 // Home page
 Route::get('/', [PageViewController::class, 'home'])->name('home');
 
-//Applies to both GET and POST route
 Route::get('/submit', [PageViewController::class, 'submit'])
     ->middleware(['auth', 'role:admin'])
     ->name('submit');
@@ -50,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('user-chicken-sandwiches.store');
 
     Route::post('/profile/change-password', [User::class, 'changePassword'])->name('profile.password.update');
-    
+
     Route::prefix('profile')->group(function () {
 
         Route::get('/', [PageViewController::class, 'profile'])->name('profile');
