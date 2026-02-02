@@ -21,11 +21,9 @@
                     <a href="{{ url('/') }}" class="hover:text-orange-400 font-bold">Home</a>
                     <a href="{{ url('/search') }}" class="hover:text-orange-400 font-bold">Chicken Sandwich</a>
 
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ url('/submit') }}" class="hover:text-orange-400 font-bold">Enter Chicken Sandwich</a>
-                        @endif
-                    @endauth
+                    @role ('admin')
+                        <a href="{{ url('/submit') }}" class="hover:text-orange-400 font-bold">Enter Chicken Sandwich</a>
+                    @endrole
                 </div>
 
                 <div class="hidden md:flex md:items-center md:space-x-4">

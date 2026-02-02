@@ -152,11 +152,36 @@ class AccessTest extends TestCase {
         $admin->assignRole('admin');
         $this->insertTestEntry($admin);
         $last_inserted_entry = ChickenSandwich::latest()->first();
-        
+
         //attempt to delete the last entry as a user
-        $response = $this->actingAs($user)->delete("/delete/{$last_inserted_entry->id}"); 
+        $response = $this->actingAs($user)->delete("/chicken-sandwich/{$last_inserted_entry}"); 
             
         $response->assertStatus(403);
+    }
+
+    /**
+     * Test that guests cannot insert the newly inserted chicken sandwich entry
+     */
+    public function test_guests_cannot_delete(): void {
+
+        
+        //only admins can insert, so we need that here due to authorization
+        $admin = $this->getUser();
+        $admin->assignRole('admin');
+        $this->insertTestEntry($admin);
+        $last_inserted_entry = ChickenSandwich::latest()->first();
+        
+        //attempt to delete the last entry as a user
+        $response = $this->delete("/chicken-sandwich/{$last_inserted_entry->id}"); 
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('chicken_sandwiches', [
+            'id' => $last_inserted_entry->id
+        ]);
+
+
+            
+        
     }
         
 }

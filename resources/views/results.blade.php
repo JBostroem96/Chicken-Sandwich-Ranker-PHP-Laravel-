@@ -115,7 +115,7 @@
                                         </button>
                                     </form>
 
-                                    <a href="{{ route('chicken-sandwiches.edit', $chicken_sandwich->id) }}"
+                                    <a href="{{ route('chicken-sandwiches.update', $chicken_sandwich->id) }}"
                                     value="{{ $chicken_sandwich->id }}" name="chicken_sandwich_id" class="inline-block mt-2 bg-orange-500 border-4 border-orange-400 text-white font-extrabold text-lg px-4 py-2 rounded-xl hover:shadow-md hover:shadow-orange-500">
                                         EDIT
                                     </a>
