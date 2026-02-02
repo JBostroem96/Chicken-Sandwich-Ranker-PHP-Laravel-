@@ -11,6 +11,7 @@ use App\Models\User;
 // Home page
 Route::get('/', [PageViewController::class, 'home'])->name('home');
 
+// features only accessed by the admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/submit', [PageViewController::class, 'submit'])->name('submit');
@@ -25,11 +26,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::delete('/chicken-sandwiches/{id}', [ChickenSandwichController::class, 'destroy'])
         ->name('chicken-sandwiches.destroy');     
-});
-        
-        
-
-Route::get('/chicken-sandwiches', [ChickenSandwichController::class, 'index'])->name('chicken-sandwiches.index');
+});    
 
 // Group all routes handled by PageViewController
 Route::controller(PageViewController::class)->group(function () {
