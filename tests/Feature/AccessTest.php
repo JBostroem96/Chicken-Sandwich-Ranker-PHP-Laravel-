@@ -205,5 +205,109 @@ class AccessTest extends TestCase {
             'id' => $entry->id
         ]);
     }
+
+
+
+
+
+
+
+
+
+    /**
+     * AUTH USER TESTS
+     */
+
+
+    /**
+     * create the test data and return it
+     */
+    public function createTestReviewData(): array {
+
+        $entry = ChickenSandwich::factory()->create();
+
+        return $test_entry_data = [
+            'chicken_sandwich_id' => $entry->id,
+            'score' => 8,
+            'review' => "This is a review test and it needs to be at least 30 characters long
+            so I'm just writing a test review to make sure that it reaches 30 characters long" 
+        ];
+    }
+
+    /**
+    * Insert the new test entry and return the response
+    *
+    * @param User|null $user               the user or null object
+    */
+    public function insertTestReviewEntry(?User $user, Array $test_data): TestResponse {
+
+        if ($user !== null) {
+
+            return $this->actingAs($user)->post('/chicken-sandwiches', $test_data);
+            
+        } else {
+
+            return $this->post('/chicken-sandwiches', $test_data);
+        }
+    }
+
+
+    public function test_user_can_submit(): void {
+
+        $test_data = $this->createTestReviewData();
+
+        $user = $this->getUser();
+
+        $this->insertTestReviewEntry($user, $test_data)->assertRedirect();
+
+        $this->assertDatabaseHas('user_chicken_sandwiches', [
+
+            'user_id' => $user->id,
+            'chicken_sandwich_id' => $test_data['chicken_sandwich_id'],
+            'score' => $test_data['score'],
+            'review' => $test_data['review']
+        ]);
+    }
+
+    public function test_guest_cannot_submit_entry(): void {
+
+        $test_data = $this->createTestReviewData();
+
+        $user = $this->getUser();
+        $user = 
+        $this->insertTestReviewEntry(null, $test_data)->assertRedirect(route('login'));;
+
+        $this->assertDatabaseMissing('user_chicken_sandwiches', [
+            
+            'chicken_sandwich_id' => $test_data['chicken_sandwich_id'],
+            'score' => $test_data['score'],
+            'review' => $test_data['review']
+        ]);
+    }
+
+    public function test_admin_can_submit_entry(): void {
+
+        $test_data = $this->createTestReviewData();
+        $admin = $this->getUser();
+        $admin->assignRole('admin');
+
+        $this->insertTestReviewEntry($admin, $test_data)->assertRedirect();
+
+        $this->assertDatabaseHas('user_chicken_sandwiches', [
+            'user_id' => $admin->id,
+            'chicken_sandwich_id' => $test_data['chicken_sandwich_id'],
+            'score' => $test_data['score'],
+            'review' => $test_data['review']
+        ]);
+    }
+
+
+
+
+
+
+
+
+
         
 }
