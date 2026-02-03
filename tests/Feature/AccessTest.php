@@ -252,7 +252,7 @@ class AccessTest extends TestCase {
     }
 
 
-    public function test_user_can_submit(): void {
+    public function test_user_can_submit_rating(): void {
 
         $test_data = $this->createTestReviewData();
 
@@ -269,7 +269,7 @@ class AccessTest extends TestCase {
         ]);
     }
 
-    public function test_guest_cannot_submit_entry(): void {
+    public function test_guest_cannot_submit_rating(): void {
 
         $test_data = $this->createTestReviewData();
 
@@ -285,7 +285,7 @@ class AccessTest extends TestCase {
         ]);
     }
 
-    public function test_admin_can_submit_entry(): void {
+    public function test_admin_can_submit_rating(): void {
 
         $test_data = $this->createTestReviewData();
         $admin = $this->getUser();
