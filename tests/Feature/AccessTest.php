@@ -272,7 +272,6 @@ class AccessTest extends TestCase {
         $test_data = $this->createTestReviewData();
 
         $user = $this->getUser();
-        $user = 
         $this->insertTestReviewEntry(null, $test_data)->assertRedirect(route('login'));;
 
         $this->assertDatabaseMissing('user_chicken_sandwiches', [
