@@ -207,15 +207,8 @@ class AccessTest extends TestCase {
     }
 
 
-
-
-
-
-
-
-
     /**
-     * AUTH USER TESTS
+     * AUTH USER RATING SUBMISSION TESTS
      */
 
 
@@ -251,7 +244,9 @@ class AccessTest extends TestCase {
         }
     }
 
-
+    /**
+     * test that a user can submit a rating
+     */
     public function test_user_can_submit_rating(): void {
 
         $test_data = $this->createTestReviewData();
@@ -269,6 +264,9 @@ class AccessTest extends TestCase {
         ]);
     }
 
+    /**
+     * test that guest cannot submit a rating
+     */
     public function test_guest_cannot_submit_rating(): void {
 
         $test_data = $this->createTestReviewData();
@@ -285,6 +283,9 @@ class AccessTest extends TestCase {
         ]);
     }
 
+    /**
+     * test that admin can submit a chicken sandwich rating
+     */
     public function test_admin_can_submit_rating(): void {
 
         $test_data = $this->createTestReviewData();
@@ -299,15 +300,5 @@ class AccessTest extends TestCase {
             'score' => $test_data['score'],
             'review' => $test_data['review']
         ]);
-    }
-
-
-
-
-
-
-
-
-
-        
+    }       
 }

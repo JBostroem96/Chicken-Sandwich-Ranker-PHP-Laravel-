@@ -60,9 +60,9 @@ Route::middleware(['auth'])->group(function () {
                 'destroy' => 'profile.ratings.destroy',
             ]);
                 
-        });
-        
     });
+        
+});
 
 // Breeze auth routes (register, login, password, etc.)
 require __DIR__.'/auth.php';
