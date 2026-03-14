@@ -4,8 +4,8 @@
 @section('h1', $h1 ?? 'Verify Email')
 
 @section('content')
-<div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg border-2 border-brandOrange">
+    <div class="mb-4 text-md text-black">
         {{ __('Thanks for signing up! Before getting started, please verify your email address by clicking the link we just emailed to you. If you didn\'t receive the email, we will gladly send you another.') }}
     </div>
 
@@ -17,10 +17,10 @@
 
     <div class="mt-4 flex items-center justify-between">
         <!-- Resend Verification Email Form -->
-        <form method="POST" action="{{ route('verification.send') }}">
+        <form method="POST" class=" text-brandOrange font-bold p-6 rounded-lg" action="{{ route('verification.send') }}">
             @csrf
             <button type="submit"
-                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+               class="ml-3 bg-orange-500 hover:bg-orange-600 border-4 border-orange-300 text-white text-lg font-bold py-2 px-4 rounded-xl">
                 {{ __('Resend Verification Email') }}
             </button>
         </form>
@@ -29,7 +29,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                class="underline text-blue-500 text-lg hover:text-orange-700 font-bold">
                 {{ __('Log Out') }}
             </button>
         </form>
