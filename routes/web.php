@@ -12,7 +12,7 @@ use App\Models\User;
 Route::get('/', [PageViewController::class, 'home'])->name('home');
 
 // features only accessed by the admin
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin', 'verified'])->group(function () {
 
     Route::get('/submit', [PageViewController::class, 'submit'])->name('submit');
 
@@ -41,7 +41,7 @@ Route::controller(PageViewController::class)->group(function () {
 });
 
 // middleware/authenticated route, ensures only signed in users can access
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
        
     Route::get('/profile/change-password', [PageViewController::class, 'changePassword'])->name('profile.change-password');
     Route::post('/chicken-sandwiches', [UserChickenSandwichController::class, 'store'])

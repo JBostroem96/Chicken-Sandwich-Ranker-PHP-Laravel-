@@ -12,11 +12,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 /**
  * User model representing application users
  */
-class User extends Authenticatable {
+class User extends Authenticatable implements MustVerifyEmail {
 
     use HasApiTokens;
     use HasFactory;
