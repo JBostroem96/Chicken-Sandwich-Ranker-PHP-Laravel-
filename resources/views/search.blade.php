@@ -27,7 +27,7 @@
             <br>
             <label>Score</label>
               <input type="radio"
-                    name="search-type"
+                    name="search-type-score"
                     id="search-type"
                     value="score"
                     x-model="type"
