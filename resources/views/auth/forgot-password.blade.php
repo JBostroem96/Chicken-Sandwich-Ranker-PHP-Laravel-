@@ -41,7 +41,7 @@
                     value="{{ old('email') }}"
                     required
                     autofocus
-                    class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none sm:text-sm"
+                    class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-3 py-2 bg-white focus:outline-none sm:text-sm"
                 />
             </div>
 
