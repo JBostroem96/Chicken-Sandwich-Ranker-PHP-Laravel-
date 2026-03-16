@@ -23,12 +23,12 @@ class ChickenSandwichController extends Controller {
      */
     public function storeImages(Request $request): Array {
 
-        $images = [];
-
-        $images[] = $request->file('image')->store('images', 'public');
-        $images[] = $request->file('logo')->store('logos', 'public');
-        
-        return $images;
+        //return the images in an array
+        return [
+            
+            'image' => $request->file('image')->store('sandwiches/images', 'public'),
+            'logo' => $request->file('logo')->store('sandwiches/logos', 'public')
+        ];
     }
 
     /**
@@ -49,14 +49,14 @@ class ChickenSandwichController extends Controller {
 
         try {
 
-            $images = $this->storeImages($request);
+            $imagePaths = $this->storeImages($request);
 
             ChickenSandwich::create([
 
                 'name' => $request['name'],
                 'company' => $request['company'],
-                'image' => $images[0],
-                'logo' => $images[1]
+                'image' => $imagePaths['image'],
+                'logo' => $imagePaths['logo']
             ]);
             
         } catch (Exception $e) {
