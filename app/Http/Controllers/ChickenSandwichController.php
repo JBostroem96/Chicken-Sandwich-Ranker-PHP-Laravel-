@@ -25,7 +25,7 @@ class ChickenSandwichController extends Controller {
 
         //return the images in an array
         return [
-            
+
             'image' => $request->file('image')->store('sandwiches/images', 'public'),
             'logo' => $request->file('logo')->store('sandwiches/logos', 'public')
         ];
@@ -156,9 +156,6 @@ class ChickenSandwichController extends Controller {
         $chicken_sandwich_id = $request->input('chicken-sandwich-update');
 
         $chicken_sandwich = ChickenSandwich::findOrFail($chicken_sandwich_id);
-         
-        //method call to validate the images
-        $this->validateImages($request);
 
         //validate the input
         $validation = $request->validate([
@@ -181,13 +178,13 @@ class ChickenSandwichController extends Controller {
 
         try {
 
-            $images = $this->storeImages($request);
+            $imagePaths = $this->storeImages($request);
 
             $chicken_sandwich->update([
                 'name' => $validation['name'],
                 'company' => $validation['company'],
-                'image' => $images[0],
-                'logo' => $images[1]
+                'image' => $imagePaths['image'],
+                'logo' => $imagePaths['logo']
             ]);
 
 
