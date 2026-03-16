@@ -15,25 +15,7 @@ use App\Models\ChickenSandwich;
  */
 class ChickenSandwichController extends Controller {
 
-    /**
-     * Validate the images
-     *
-     * @param Request $request              the request object that contains the input
-     */
-    public function validateImages(Request $request) { 
-
-        $sharedRulesForImages = ['required',
-                    'image',
-                    'mimes:jpg,jpeg,png,webp',
-                    'max:2048'];
-            
-
-        $request->validate([
-                'image' => $sharedRulesForImages,
-                'logo' => $sharedRulesForImages
-        ]);
-    }
-
+    
     /**
      * Store the images
      *
@@ -61,10 +43,9 @@ class ChickenSandwichController extends Controller {
 
             'name' => 'string|required',
             'company' => 'string|required',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'logo' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
-
-        //method call to validate the images
-        $this->validateImages($request);
 
         try {
 
