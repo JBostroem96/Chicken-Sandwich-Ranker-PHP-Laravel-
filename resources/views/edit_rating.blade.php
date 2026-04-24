@@ -23,17 +23,22 @@
         </div>
     @endif
                        
-    <form action="{{ route('profile.ratings.update', $rating->chicken_sandwich_id) }}" method='POST'>
+    <form action="{{ route('profile.ratings.update', $rating->chicken_sandwich_id) }}" class="border-2 p-5 border-brandOrange rounded-lg" method='POST'>
         @csrf
         @method('PUT')
-        <input type='numeric' name='new_score' pattern='[1-9]|10' class="rounded-md border-gray-500 focus:border-orange-500 focus:ring-orange-500 px-3 py-2 text-gray-800 placeholder-gray-400">
-        <div class="flex flex-col items-center">
+        <p class="text-center text-orange-600 font-bold">Score:</p>
+        <input type='number' 
+                min="1" 
+                max="10" 
+                name='new_score' pattern='[1-9]|10' class="mt-2 p-2 border border-orange-400 rounded-lg w-full">
+        
+        <div class="flex flex-col items-center mt-5">
             <label for="review" class="font-extrabold text-orange-600">Review</label>
             <textarea rows="6" cols="40" name="review"
                 class="mt-2 p-2 border border-orange-400 rounded-lg">{{ old('review', $rating->review) }}</textarea>
         </div>
-        <button class="bg-orange-500 hover:bg-orange-600 border-4 border-orange-300 rounded-xl px-6 py-2 font-bold text-white text-lg mb-3 sm:mb-0" type='submit' id='edit-score'
-        name='edit-score'  value='<?=$rating->chicken_sandwich_id?>'>RATE ME!</button><p>Only 1-10 is allowed, one rating per account</p>
+        <button class="bg-orange-500 hover:bg-orange-600 border-4 border-orange-300 rounded-xl px-6 py-2 font-bold text-white text-lg" type='submit' id='edit-score'
+            name='edit-score'  value='<?=$rating->chicken_sandwich_id?>'>RATE ME!</button><p>Only 1-10 is allowed, one rating per account</p>
     </form>
 @endsection                  
    
