@@ -1,4 +1,21 @@
-<h1>THIS README IS CURRENTLY WORK IN PROGRESS AND HAS YET TO BE ALTERED TO REFLECT THIS PROJECT</h1>
+<h1>Chicken Sandwich Ranker</h1>
+
+<p>This is a Laravel CRUD app. Its purpose is to rank different chicken sandwiches. Users can submit, edit, update, or delete their scores, while the admin can do the same for their own scores or the chicken sandwich entries themselves.
+
+Tech stack used:
+
+*Laravel
+*PHP
+*Blade
+*Tailwind
+*Bootstrap
+*Fortify
+*Spatie
+
+And more.
+
+This page is WIP and as such it might be incomplete.</p>
+
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
