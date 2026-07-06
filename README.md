@@ -4,13 +4,13 @@
 
 Tech stack used:
 
-*Laravel
-*PHP
-*Blade
-*Tailwind
-*Bootstrap
-*Fortify
-*Spatie
+*Laravel</br>
+*PHP</br>
+*Blade</br>
+*Tailwind</br>
+*Bootstrap</br>
+*Fortify</br>
+*Spatie</br>
 
 And more.
 
